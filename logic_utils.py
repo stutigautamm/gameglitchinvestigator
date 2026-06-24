@@ -10,7 +10,7 @@ def get_range_for_difficulty(difficulty: str):
         return 1, 100
     return 1, 50
 
-def parse_guess(raw: str):
+def parse_guess(raw: str, low: int, high: int):
     # FIX: Added .strip() to cleanly handle whitespace inputs
     if raw is None or raw.strip() == "":
         return False, None, "Enter a guess."
@@ -22,6 +22,10 @@ def parse_guess(raw: str):
             value = int(raw)
     except Exception:
         return False, None, "That is not a valid integer."
+
+    # FIX: Reject guesses that fall outside the active difficulty boundaries
+    if value < low or value > high:
+        return False, None, f"Your guess must be between {low} and {high}."
 
     return True, value, None
 
@@ -38,13 +42,16 @@ def check_guess(guess: int, secret: int):
 
 def update_score(current_score: int, outcome: str, attempt_number: int):
     if outcome == "Win":
-        points = 100 - 10 * (attempt_number + 1)
-        if points < 10:
-            points = 10
-        return current_score + points
+        # FIX: Calculate final score only at the end. 
+        # Base 100 minus 5 points for every wrong attempt before this winning one.
+        points_earned = 100 - (5 * (attempt_number - 1))
+        if points_earned < 10:
+            points_earned = 10
+        return current_score + points_earned
 
-    # FIX: Standardized penalty reduction instead of the glitchy modulo score addition formula
+    # FIX: Stripped out the glitchy modulo math completely. 
+    # Wrong guesses do nothing to the score live; it is calculated all at once when they win!
     if outcome in ["Too High", "Too Low"]:
-        return current_score - 5
+        return current_score
 
     return current_score
