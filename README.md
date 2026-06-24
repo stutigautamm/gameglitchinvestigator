@@ -26,6 +26,7 @@ It wrote the code, ran away, and now the game is unplayable.
 ## 📝 Document Your Experience
 
 - [ ] Describe the game's purpose.
+
 This is a Streamlit-based interactive number guessing game. Players select a difficulty (Easy, Normal, or Hard), which determines the range of numbers and the number of attempts they are allowed. The player submits guesses and receives "Higher" or "Lower" hints, and their final score is calculated based on how many wrong guesses they made before finding the secret number.
 
 - [ ] Detail which bugs you found.
@@ -47,7 +48,7 @@ Reversed the greater-than/less-than logic inside check_guess so the hints point 
 
 Updated parse_guess to require minimum and maximum boundaries, explicitly rejecting letters, empty strings, and out-of-bounds numbers without incrementing the attempt counter.
 
-Updated the if new_game: block to dynamically generate the secret number using the active low and high difficulty variables instead of a hardcoded 1 and 100 and made sure the app reset st.session_state.status = "playing" and st.session_state.history = [] for the button to work.
+Updated the if new_game: block to dynamically generate the secret number using the active low and high difficulty variables instead of a hardcoded 1 and 100 and made sure the app reset st.session_state.status = "playing" and st.session_state.history = {} for the button to work.
 
 Refactored the math inside update_score to use a clean "Calculate at the End" method, keeping the score at 0 until the player wins, then awarding a flat 100 points minus 5 points per previous wrong guess.
 
